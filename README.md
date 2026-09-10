@@ -9,8 +9,10 @@ Micro-site de propuesta de José Galindo para el rol de Integration PM en un pro
 - **Derivado:** `src/SCHEME.yaml` se genera automáticamente a partir del `.md`. No editar directamente: los cambios se pierden en la siguiente regeneración.
 - **Modos de contenido usados (nuevos en v0.3):** "Qué aporto" en modo *logros* (4 logros con métrica real, no los pilares genéricos); "Arquitectura conceptual" en modo *puntos* (lista de gobierno: Workstreams/Cadence/Gates/Boundary), no diagrama de cajas ni imagen.
 - **CV:** [`assets/cv-grouperp-d365-integrationpm.pdf`](assets/cv-grouperp-d365-integrationpm.pdf), enlazado desde el botón "Download CV" del hero (`botones_hero` → `destino: cv`, resuelto contra `cv_pdf`). Primer caso real que ejercita esa clave simbólica — no se usaba en `candidatura-bootcamp-ia`.
+- **Mensaje de postulado:** [`src/MENSAJE_GroupERP_D365_IntegrationPM.md`](src/MENSAJE_GroupERP_D365_IntegrationPM.md), basado en `MENSAJE_POSTULADO_TEMPLATE.en.md` v0.1 (opción C: gancho + transparencia con una prueba dura + enlace acotado + cierre). La prueba dura es la misma que encabeza "What I bring" en `src/SCHEME.md` — si cambia allí, cámbiala aquí también. Primer caso real de esta plantilla.
+- **URL publicada:** declarada en `url_publicada` dentro de `src/SCHEME.md` (`https://proposals.josegalindo.net/integrationPM-GERP/`) — ya no se reporta a mano por separado. `python3 validar_mensaje.py <ruta a este proyecto>` (o `build.py`, que lo ejecuta automáticamente) comprueba que el mensaje de postulado la contiene y que cita la misma cifra que encabeza "Qué aporto". Primer proyecto real que ejercita este chequeo.
 
-## ESTADO: borrador sin revisar (`version_documento: "0.2"`)
+## ESTADO: borrador sin revisar (`version_documento: "0.3"`)
 
 Este `SCHEME.md` es un borrador de validación del pipeline, no un entregable listo para enviar. Antes de publicarlo, revisa en `src/SCHEME.md`:
 
@@ -29,3 +31,4 @@ Este `SCHEME.md` es un borrador de validación del pipeline, no un entregable li
 
 - v0.1 (2026-09-10) — generado como caso de validación real de `propuesta_to_scheme.py` y de los modos "logros"/"puntos" (v0.3 del toolkit) — primera oportunidad real y primer caso real en inglés que ejercitan el pipeline completo.
 - v0.2 (2026-09-10) — añadido el CV adjunto (`cv_pdf` + botón "Download CV" en el hero).
+- v0.3 (2026-09-10) — declarada `url_publicada`; primer caso real de `validar_mensaje.py` (ejecución en verde, sin avisos, tras corregir en el toolkit un falso positivo del chequeo heurístico con identificadores técnicos como "DB2"/"AS/400").

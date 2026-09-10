@@ -10,6 +10,7 @@ cv_pdf: "assets/cv-grouperp-d365-integrationpm.pdf"
 linkedin_url: "https://linkedin.com/in/josegalindo"
 github_url: ""
 email_contacto: "opportunities@josegalindo.net"
+url_publicada: "https://proposals.josegalindo.net/integrationPM-GERP/"
 telefono: "+34 682 832 341"
 nombre_completo: "José Francisco Galindo Egea"
 credenciales: "PMP®"
@@ -23,11 +24,12 @@ pie_pagina: "José Galindo — Group ERP / D365 F&O Integration PM ·"
 # v0.1 (2026-09-10) — borrador generado automáticamente por propuesta_to_scheme.py
 #                      desde PROPUESTA_GroupERP_D365_IntegrationPM.md.
 # v0.2 (2026-09-10) — añadido el CV adjunto (cv_pdf + botón "Download CV" en el hero).
-#                      Sigue pendiente de aprobación final (cliente_u_organizacion vacío,
+# v0.3 (2026-09-10) — declarada url_publicada (cierra el reporte manual de la URL);
+#                      sigue pendiente de aprobación final (cliente_u_organizacion vacío,
 #                      títulos de posicionamiento sin confirmar) antes de subir a "1.0".
 plantilla_base: MICROSITE_TEMPLATE.en.md
 plantilla_version: "0.3"
-version_documento: "0.2"
+version_documento: "0.3"
 
 botones_hero:
   - etiqueta: "See why I'm a fit →"

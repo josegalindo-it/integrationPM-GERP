@@ -12,6 +12,7 @@ metadata:
   linkedin_url: https://linkedin.com/in/josegalindo
   github_url: ''
   email_contacto: opportunities@josegalindo.net
+  url_publicada: https://proposals.josegalindo.net/integrationPM-GERP/
   telefono: +34 682 832 341
   nombre_completo: José Francisco Galindo Egea
   credenciales: PMP®
@@ -137,4 +138,4 @@ pie_pagina: José Galindo — Group ERP / D365 F&O Integration PM ·
 procedencia:
   plantilla_base: MICROSITE_TEMPLATE.en.md
   plantilla_version: '0.3'
-  version_documento: '0.2'
+  version_documento: '0.3'
