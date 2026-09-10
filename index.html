@@ -1,0 +1,418 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>José Galindo — Group ERP / D365 F&O Integration PM</title>
+<meta name="description" content="Propuesta de José Galindo para el rol de Integration PM en un programa Group ERP / Dynamics 365 F&O: gobierno de migración de datos e integración multi-país, multi-proveedor.">
+</head>
+<body>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  :root {
+    --bg: #F2F4F8;
+    --surface: #FFFFFF;
+    --surface-2: #E7EAF1;
+    --text: #12141C;
+    --text-muted: #565F72;
+    --accent: #B8720F;
+    --accent-2: #2B6E93;
+    --accent-soft: #F4E4C8;
+    --border: #D8DCE6;
+    --on-accent: #17110A;
+    --shadow: 0 1px 2px rgba(18,20,28,0.04), 0 8px 24px rgba(18,20,28,0.06);
+
+    --font-display: "Syne", "Arial Black", sans-serif;
+    --font-body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+    --font-mono: "IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0A0E17;
+      --surface: #121826;
+      --surface-2: #1A2233;
+      --text: #EDEFF4;
+      --text-muted: #97A0B5;
+      --accent: #E8A33D;
+      --accent-2: #74BCE6;
+      --accent-soft: rgba(232, 163, 61, 0.14);
+      --border: #262F44;
+      --on-accent: #17110A;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 12px 32px rgba(0,0,0,0.35);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --bg: #0A0E17;
+    --surface: #121826;
+    --surface-2: #1A2233;
+    --text: #EDEFF4;
+    --text-muted: #97A0B5;
+    --accent: #E8A33D;
+    --accent-2: #74BCE6;
+    --accent-soft: rgba(232, 163, 61, 0.14);
+    --border: #262F44;
+    --on-accent: #17110A;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 12px 32px rgba(0,0,0,0.35);
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
+  }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 17px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  .visually-hidden {
+    position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+    overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+  }
+
+  .skip-link {
+    position: absolute; top: -100px; left: 12px; z-index: 100;
+    background: var(--accent); color: var(--on-accent);
+    padding: 10px 16px; border-radius: 6px; font-family: var(--font-mono); font-size: 14px;
+    transition: top 0.15s ease;
+  }
+  .skip-link:focus { top: 12px; }
+
+  a { color: var(--accent-2); }
+  a:focus-visible, button:focus-visible, .nav-dot:focus-visible {
+    outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 3px;
+  }
+
+  h1, h2, h3 {
+    font-family: var(--font-display);
+    font-weight: 800;
+    line-height: 1.08;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+    margin: 0;
+  }
+
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent-2);
+    margin: 0 0 14px;
+  }
+
+  .section { padding: 96px max(24px, calc((100% - 860px) / 2)); }
+  .section-tinted { background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  .section h2 { font-size: clamp(28px, 4vw, 40px); max-width: 720px; margin-bottom: 40px; }
+
+  .prose { max-width: 68ch; }
+  .prose p { margin: 0 0 18px; color: var(--text); }
+  .prose p:last-child { margin-bottom: 0; }
+  .prose p.lede { font-size: 20px; color: var(--text); font-weight: 500; }
+
+  /* ---------- Section nav ---------- */
+  .section-nav {
+    position: fixed; right: 22px; top: 50%; transform: translateY(-50%);
+    display: flex; flex-direction: column; gap: 14px; z-index: 40;
+  }
+  .nav-dot {
+    width: 10px; height: 10px; border-radius: 50%;
+    background: var(--border); border: 1px solid transparent;
+    display: block; position: relative; text-decoration: none;
+    transition: background 0.2s ease, transform 0.2s ease;
+  }
+  .nav-dot::after {
+    content: attr(data-label);
+    position: absolute; right: 22px; top: 50%; transform: translateY(-50%);
+    font-family: var(--font-mono); font-size: 12px; color: var(--text);
+    background: var(--surface); border: 1px solid var(--border);
+    padding: 4px 10px; border-radius: 5px; white-space: nowrap;
+    opacity: 0; pointer-events: none; transition: opacity 0.15s ease;
+    box-shadow: var(--shadow);
+  }
+  .nav-dot:hover::after, .nav-dot:focus-visible::after { opacity: 1; }
+  .nav-dot.active { background: var(--accent); transform: scale(1.3); }
+  @media (max-width: 900px) { .section-nav { display: none; } }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    position: relative; min-height: 100svh; display: flex; align-items: center;
+    padding: 140px max(24px, calc((100% - 1000px) / 2)) 96px;
+    background: var(--bg); overflow: hidden;
+    color: var(--text);
+  }
+  .hero-grid { position: absolute; inset: 0; z-index: 0; }
+  .hero-grid svg { width: 100%; height: 100%; display: block; }
+  .hero-decor {
+    position: absolute; top: 0; right: 0; bottom: 0; width: 44%;
+    z-index: 0; overflow: hidden;
+  }
+  .hero-decor svg { width: 100%; height: 100%; display: block; }
+  @media (max-width: 760px) { .hero-decor { display: none; } }
+  .hero-node { animation: pulse 5s ease-in-out infinite; transform-origin: center; }
+  .hero-node.n2 { animation-delay: 1.1s; }
+  .hero-node.n3 { animation-delay: 2.3s; }
+  .hero-node.n4 { animation-delay: 0.6s; }
+  @keyframes pulse {
+    0%, 100% { opacity: 0.55; }
+    50% { opacity: 1; }
+  }
+
+  .hero-content { position: relative; z-index: 1; max-width: 760px; }
+  .hero h1 { font-size: clamp(34px, 5vw, 56px); margin-bottom: 24px; }
+  .hero .subtitle { font-size: clamp(17px, 2vw, 20px); color: var(--text-muted); max-width: 56ch; margin: 0 0 40px; }
+
+  .hero-actions { display: flex; flex-wrap: wrap; gap: 14px; }
+  .btn {
+    font-family: var(--font-mono); font-size: 14px; letter-spacing: 0.02em;
+    padding: 13px 22px; border-radius: 7px; text-decoration: none;
+    display: inline-flex; align-items: center; gap: 8px;
+    border: 1px solid transparent; transition: transform 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+  }
+  .btn-primary { background: var(--accent); color: var(--on-accent); font-weight: 500; }
+  .btn-primary:hover { transform: translateY(-2px); }
+  .btn-ghost { background: transparent; color: var(--text); border-color: var(--border); }
+  .btn-ghost:hover { border-color: var(--accent-2); color: var(--accent-2); transform: translateY(-2px); }
+
+  /* ---------- Cards ---------- */
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+  @media (max-width: 760px) { .card-grid { grid-template-columns: 1fr; } }
+  .card {
+    background: var(--bg); border: 1px solid var(--border); border-radius: 12px;
+    padding: 28px 26px; display: flex; flex-direction: column; gap: 14px;
+  }
+  .card-tag {
+    font-family: var(--font-mono); font-size: 13px; color: var(--accent);
+    letter-spacing: 0.06em;
+  }
+  .card h3 { font-family: var(--font-body); font-size: 19px; font-weight: 700; letter-spacing: normal; }
+  .card p { margin: 0; color: var(--text-muted); font-size: 15.5px; }
+
+  /* ---------- Proyecto / diagram ---------- */
+  .problem-solution {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-bottom: 56px;
+  }
+  @media (max-width: 720px) { .problem-solution { grid-template-columns: 1fr; } }
+  .ps-block h3 {
+    font-family: var(--font-mono); font-size: 13px; text-transform: uppercase;
+    letter-spacing: 0.1em; color: var(--text-muted); font-weight: 500; margin-bottom: 10px;
+  }
+  .ps-block p { margin: 0; color: var(--text); }
+
+  .diagram-figure { margin: 0 0 40px; }
+  .diagram-scroll { overflow-x: auto; padding: 8px 0 16px; }
+  .diagram-scroll svg { display: block; min-width: 640px; width: 100%; height: auto; color: var(--text); }
+  .diagram-box { fill: var(--surface-2); stroke: var(--border); stroke-width: 1.5; }
+  .diagram-box--accent { fill: var(--accent-soft); stroke: var(--accent); }
+  .diagram-title { font-family: var(--font-mono); font-size: 13px; font-weight: 500; fill: currentColor; text-anchor: middle; letter-spacing: 0.04em; }
+  .diagram-title--accent { fill: var(--accent); }
+  .diagram-desc { font-family: var(--font-body); font-size: 13px; fill: var(--text-muted); text-anchor: middle; }
+  .diagram-rule { stroke: var(--border); stroke-width: 1; }
+  .diagram-arrow { stroke: var(--text-muted); stroke-width: 1.75; fill: none; }
+  .diagram-arrowhead { fill: var(--text-muted); }
+  .diagram-label { font-family: var(--font-mono); font-size: 11.5px; fill: var(--text-muted); text-anchor: middle; text-transform: uppercase; letter-spacing: 0.06em; }
+  figcaption { font-size: 14px; color: var(--text-muted); margin-top: 10px; max-width: 68ch; }
+
+  .architecture-note { font-size: 14.5px; color: var(--text-muted); font-style: italic; margin: 0 0 20px; max-width: 68ch; }
+  .architecture-points { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+  .architecture-points li {
+    padding: 16px 20px; background: var(--surface); border: 1px solid var(--border);
+    border-radius: 10px; color: var(--text); font-size: 15.5px;
+  }
+  .architecture-points li strong { font-family: var(--font-mono); color: var(--accent-2); font-weight: 600; }
+
+  .hook {
+    font-family: var(--font-display); font-weight: 700; font-size: clamp(19px, 2.4vw, 24px);
+    color: var(--text); max-width: 640px; text-wrap: balance; margin: 0;
+    padding-left: 20px; border-left: 3px solid var(--accent);
+  }
+
+  /* ---------- Cierre ---------- */
+  .section-cta {
+    background: var(--surface); border-top: 1px solid var(--border);
+    text-align: left;
+  }
+  .cta-actions { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 8px; }
+
+  .site-footer {
+    padding: 32px max(24px, calc((100% - 860px) / 2)) 48px;
+    color: var(--text-muted); font-family: var(--font-mono); font-size: 13px;
+  }
+</style>
+
+<a class="skip-link" href="#motivacion">Saltar al contenido</a>
+
+<div class="page">
+
+  <nav class="section-nav" aria-label="Navegación de secciones">
+    <a href="#hero" data-label="Inicio" class="nav-dot active" data-section="hero"><span class="visually-hidden">Ir a Inicio</span></a>
+    <a href="#motivacion" data-label="Motivation" class="nav-dot" data-section="motivacion"><span class="visually-hidden">Ir a Motivación</span></a>
+    <a href="#valor" data-label="What I bring" class="nav-dot" data-section="valor"><span class="visually-hidden">Ir a Qué aporto</span></a>
+    <a href="#proyecto" data-label="Project" class="nav-dot" data-section="proyecto"><span class="visually-hidden">Ir a Proyecto</span></a>
+    <a href="#cierre" data-label="Contact" class="nav-dot" data-section="cierre"><span class="visually-hidden">Ir a Contacto</span></a>
+  </nav>
+
+  <header id="hero" class="hero">
+    <div class="hero-grid" aria-hidden="true">
+      <svg viewBox="0 0 1000 700" preserveAspectRatio="xMidYMid slice">
+        <defs>
+          <pattern id="grid" width="42" height="42" patternUnits="userSpaceOnUse">
+            <circle cx="1" cy="1" r="1" fill="currentColor" opacity="0.14" />
+          </pattern>
+        </defs>
+        <rect width="1000" height="700" fill="url(#grid)" />
+      </svg>
+    </div>
+    <div class="hero-decor" aria-hidden="true">
+      <svg viewBox="0 0 560 760" preserveAspectRatio="xMidYMid slice">
+        <g stroke="var(--accent-2)" stroke-width="1" opacity="0.4" fill="none">
+          <line x1="90" y1="120" x2="300" y2="210" />
+          <line x1="300" y1="210" x2="220" y2="440" />
+          <line x1="300" y1="210" x2="470" y2="170" />
+          <line x1="470" y1="170" x2="500" y2="400" />
+          <line x1="220" y1="440" x2="360" y2="580" />
+        </g>
+        <circle class="hero-node n1" cx="90" cy="120" r="5" fill="var(--accent)" />
+        <circle class="hero-node n2" cx="300" cy="210" r="6.5" fill="var(--accent)" />
+        <circle class="hero-node n3" cx="220" cy="440" r="4.5" fill="var(--accent-2)" />
+        <circle class="hero-node n4" cx="470" cy="170" r="5" fill="var(--accent-2)" />
+        <circle class="hero-node n2" cx="500" cy="400" r="4.5" fill="var(--accent)" />
+        <circle class="hero-node n3" cx="360" cy="580" r="5.5" fill="var(--accent-2)" />
+      </svg>
+    </div>
+    <div class="hero-content">
+      <p class="eyebrow">Freelance Proposal · Group ERP / D365 F&O Integration</p>
+      <h1>Governing data-migration and integration risk on a two-country Group ERP rollout.</h1>
+      <p class="subtitle">A proposal for the Group ERP / D365 F&O Integration PM role: delivery discipline and governance rigor, not dependent on prior hands-on D365 experience.</p>
+      <div class="hero-actions">
+<a class="btn btn-primary" href="#motivacion">See why I&#x27;m a fit <span aria-hidden="true">→</span></a>
+<a class="btn btn-ghost" href="assets/cv-grouperp-d365-integrationpm.pdf" target="_blank" rel="noopener">Download CV</a>
+<a class="btn btn-ghost" href="https://linkedin.com/in/josegalindo" target="_blank" rel="noopener">LinkedIn</a>
+</div>
+    </div>
+  </header>
+
+  <main>
+    <section id="motivacion" class="section">
+      <p class="eyebrow">Motivation</p>
+      <h2>This is the kind of engagement I actively look for.</h2>
+      <div class="prose">
+<p class="lede">This program sits squarely in the type of engagement I actively look for: a fixed-scope, time-boxed data-migration and integration workstream inside a larger Group ERP rollout, spanning two countries and requiring close governance of external technical integrators. That specific combination — multi-country, multi-vendor, deadline-driven, embedded in a larger regulated corporate program — is where delivery discipline and governance rigor matter as much as, or more than, prior hands-on familiarity with the specific ERP platform.</p>
+</div>
+    </section>
+
+    <section id="valor" class="section section-tinted">
+      <p class="eyebrow">What I bring</p>
+      <h2>Twenty years managing exactly this kind of delivery risk.</h2>
+      <div class="prose" style="margin-bottom:32px;">
+<p>Over 20 years directing complex, multi-technology integration and data-migration programs for Tier-1 banking, insurance, and telecommunications groups. I am not a Dynamics 365 Finance & Operations specialist, and I want to be upfront about that. What I bring instead is a proven system for managing exactly the risk this workstream carries:</p>
+</div>
+      <div class="card-grid">
+<article class="card">
+          <span class="card-tag">01</span>
+          <h3>Data migration governance</h3>
+          <p>directed the technical delivery of a Credit Risk Data Warehouse migration component (~11,000 hours), cutting the time needed to onboard data into the target platform by roughly 20% through a standardized feeder-migration and validation methodology across legacy (COBOL/CICS/DB2, AS/400) and target Data Warehouse environments.</p>
+        </article>
+<article class="card">
+          <span class="card-tag">02</span>
+          <h3>Integration quality under multi-technology conditions</h3>
+          <p>on a three-stream integration program (mainframe Host, Java front-end, SOA/Web Services), raised pre-production defect detection above 85% through structured functional testing and UAT, protecting production from integration failures.</p>
+        </article>
+<article class="card">
+          <span class="card-tag">03</span>
+          <h3>Multi-vendor / integrator governance</h3>
+          <p>directed a hybrid delivery ecosystem of 6 external technical factories on an 82,000-hour/year program, sustaining ~92% plan compliance.</p>
+        </article>
+<article class="card">
+          <span class="card-tag">04</span>
+          <h3>Cross-country program coordination</h3>
+          <p>aligned a 17-project, ~150,000-hour international portfolio between corporate and regional teams, recovering 4–6 weeks of accumulated schedule delay through structured dependency management and replanning.</p>
+        </article>
+</div>
+      <div class="prose" style="margin-top:32px;">
+<p>PMP® and ITIL® 4 Foundation certified.</p>
+</div>
+    </section>
+
+    <section id="proyecto" class="section">
+      <p class="eyebrow">Project · Proposal</p>
+      <h2>How I'd structure governance for this workstream.</h2>
+
+      <div class="problem-solution">
+        <div class="ps-block">
+          <h3>The problem</h3>
+          <p>Delivering a two-country data-migration and system-integration workstream into a new Group ERP platform within a fixed 18-month window, while governing one or more external technical integrators. The main exposure is not the ERP configuration itself — that sits with the implementation partner — but delivery risk on the workstream around it: data integrity loss during migration, schedule slippage from uncoordinated cross-country dependencies, and quality escapes from insufficient testing discipline ahead of cutover.</p>
+        </div>
+        <div class="ps-block">
+          <h3>The proposed solution</h3>
+          <p>A standardized, previously proven data-migration and integration-governance methodology, not dependent on prior familiarity with the specific ERP platform: structured feeder/data validation design, functional testing and UAT gating before every promotion, and a vendor/integrator governance model that keeps external technical teams accountable to scope, data quality, and schedule. Platform-specific (D365 F&O) fluency is built in parallel, in direct coordination with the implementation partner's functional and technical leads, without that ramp-up sitting on the program's critical path.</p>
+        </div>
+      </div>
+
+      <figure class="diagram-figure">
+<p class="architecture-note">engagement governance — not D365 technical/solution architecture, which remains the implementation partner's scope</p>        <ul class="architecture-points">
+<li><strong>Workstreams:</strong> Data Migration & Quality · System Integration (legacy-to-D365 interfaces) · Testing & Cutover (SIT/UAT/Go-Live) · Vendor/Integrator Governance · Cross-Country Risk & Dependency Management (Spain/Portugal).</li>
+<li><strong>Cadence:</strong> weekly workstream sync; bi-weekly steering update; monthly cross-country stakeholder review.</li>
+<li><strong>Gates:</strong> migration dry-runs and mock cutovers ahead of go-live, with defect-detection thresholds before any promotion to production — the same discipline applied on prior multi-technology integration programs.</li>
+<li><strong>Boundary, stated explicitly:</strong> this architecture governs delivery, risk, and vendor accountability. It does not extend into the D365 F&O technical/solution architecture itself, which is outside this proposal's scope and outside verifiable prior experience.</li>
+</ul>
+      </figure>
+
+    </section>
+
+    <section id="cierre" class="section section-cta">
+      <p class="eyebrow">Closing</p>
+      <h2>Ready to start from week one.</h2>
+<p class="subtitle" style="margin-bottom:32px;">Immediate availability, with national/international mobility and full compatibility with the Madrid-hybrid arrangement and the travel to Paris this role requires. I'd welcome a conversation to walk through how I would structure migration and integration governance for this specific program from week one.</p>      <div class="cta-actions">
+<a class="btn btn-primary" href="https://linkedin.com/in/josegalindo" target="_blank" rel="noopener">Connect on LinkedIn</a>
+<a class="btn btn-ghost" href="mailto:opportunities@josegalindo.net">Write an email</a>
+</div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>José Galindo — Group ERP / D365 F&O Integration PM · <span id="year"></span></p>
+  </footer>
+</div>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  (function () {
+    var dots = Array.prototype.slice.call(document.querySelectorAll('.nav-dot'));
+    var sections = dots.map(function (d) {
+      return document.getElementById(d.dataset.section);
+    });
+    if (!('IntersectionObserver' in window) || !sections.length) return;
+
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        var idx = sections.indexOf(entry.target);
+        if (idx === -1) return;
+        dots.forEach(function (d) { d.classList.remove('active'); });
+        dots[idx].classList.add('active');
+      });
+    }, { rootMargin: '-40% 0px -50% 0px', threshold: 0 });
+
+    sections.forEach(function (s) { if (s) observer.observe(s); });
+  })();
+</script>
+
+</body>
+</html>
